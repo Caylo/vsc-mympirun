@@ -119,9 +119,12 @@ def main():
     """Main function"""
     try:
         instance_options = get_mpi_and_sched_and_options()
+        print instance_options
         if instance_options:
             instance = getinstance(*instance_options)
+            print "starting main"
             instance.main()
+
     except Exception:
         fancylogger.getLogger().exception("Main failed")
         sys.exit(1)
