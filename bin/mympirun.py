@@ -124,7 +124,6 @@ def main():
             instance = getinstance(*instance_options)
             print "starting main"
             instance.main()
-
     except Exception:
         fancylogger.getLogger().exception("Main failed")
         sys.exit(1)
