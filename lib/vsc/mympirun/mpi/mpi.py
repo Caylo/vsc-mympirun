@@ -546,23 +546,19 @@ class MPI(object):
         if self.mpinodes is None:
             self.set_mpinodes()
 
-        nodes = []
 
         mpdboottxt = ""
         universe_ppn = self.get_universe_ncpus()
-        for node in nub(self.nodes):
+
+        for node in nub(self.mpinodes):
             txt = node
-            if self.options.universe:
-                nodes.append([node] * universe_ppn[node])
-            else:
-                nodes.append([node] * self.ppn_dict[node])
             if not self.has_hydra:
                 if self.options.universe is not None and self.options.universe > 0:
                     txt += ":%s" % universe_ppn[node]
                 txt += " ifhn=%s" % node
             mpdboottxt += "%s\n" % txt
 
-        nodetwt = '\n'.join(nodes)
+        nodetxt = '\n'.join(self.mpinodes)
         nodefn = os.path.join(self.mympirundir, 'nodes')
         mpdfn = os.path.join(self.mympirundir, 'mpdboot')
         try:
@@ -743,8 +739,7 @@ class MPI(object):
 
         # add the number of mpi processes (aka mpi universe) to mpdboot options
         if self.options.universe is not None and self.options.universe > 0:
-            if not self.has_hydra:
-                self.mpdboot_options.append("--ncpus=%s" % self.get_universe_ncpus()[localmachine])
+            self.mpdboot_options.append("--ncpus=%s" % self.get_universe_ncpus()[localmachine])
 
         # set verbosity
         if self.options.mpdbootverbose:
