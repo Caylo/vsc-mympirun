@@ -830,7 +830,7 @@ class MPI(object):
             else:
                 self.log.debug("make_mpiexec_hydra_options: no rmk from HYDRA_RMK %s and hydra_info %s",
                                self.HYDRA_RMK, self.hydra_info)
-        launcher = getattr(self, 'HYDRA_LAUNCHER', None)
+        launcher = launcher = [self.options.launcher].extend(getattr(self, 'HYDRA_LAUNCHER'))
         print "LAUNCHERRRRRRRRR %s" % launcher
         if launcher:
             avail_launcher = [x for x in self.HYDRA_LAUNCHER if x in self.hydra_info.get('launcher', [])]
