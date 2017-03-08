@@ -831,35 +831,36 @@ class MPI(object):
                 self.log.debug("make_mpiexec_hydra_options: no rmk from HYDRA_RMK %s and hydra_info %s",
                                self.HYDRA_RMK, self.hydra_info)
 
-        print "OPTION------- %s" % self.options.launcher
-
         default_launcher = getattr(self, 'HYDRA_LAUNCHER', None)
         if self.options.launcher:
             launcher = [self.options.launcher]
-            print "LAUNCHER LIST------ %s" % launcher
-            print "DEFAULT------ %s" % default_launcher
             launcher.extend(default_launcher)
-            print "LAUNCHER EXTEND----- %s" % launcher
         else:
             launcher = default_launcher
 
         if launcher:
             # filter out the launchers that are not in self.hydra_info
-            launcher = [x for x in launcher if x in self.hydra_info.get('launcher', [])]
-            if launcher:
-                self.log.debug("make_mpiexec_hydra_options: HYDRA: launcher %s, using first one", launcher)
+            avail_launcher = [x for x in launcher if x in self.hydra_info.get('launcher', [])]
+            if avail_launcher:
+                self.log.debug("make_mpiexec_hydra_options: HYDRA: launcher %s, using first one", avail_launcher)
+                self.mpiexec_options.append("-%s %s" % (self.HYDRA_LAUNCHER_NAME, avail_launcher[0]))
+
             else:
                 self.log.debug("make_mpiexec_hydra_options: no launcher from HYDRA_LAUNCHER %s and hydra_info %s",
                                 self.HYDRA_LAUNCHER, self.hydra_info)
 
-        if launcher:
-            self.mpiexec_options.append("-%s %s" % (self.HYDRA_LAUNCHER_NAME, launcher[0]))
+                launcher_exec = getattr(self, 'HYDRA_LAUNCHER_EXEC', None)
 
-        else:
-            launcher_exec = getattr(self, 'HYDRA_LAUNCHER_EXEC', None)
-            if launcher_exec is not None:
-                self.log.debug("make_mpiexec_hydra_options: HYDRA using launcher exec %s", launcher_exec)
+                if launcher_exec is not None:
+                    self.log.debug("make_mpiexec_hydra_options: HYDRA using launcher exec %s", launcher_exec)
+                else:
+                    launcher_exec = self.get_rsh()
+
                 self.mpiexec_options.append("-%s-exec %s" % (self.HYDRA_LAUNCHER_NAME, launcher_exec))
+
+
+
+
 
     def get_hydra_info(self):
         """Get a dict with hydra info."""
