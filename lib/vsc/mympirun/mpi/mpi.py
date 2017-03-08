@@ -832,7 +832,7 @@ class MPI(object):
                                self.HYDRA_RMK, self.hydra_info)
 
         launcher = [self.options.launcher].extend(getattr(self, 'HYDRA_LAUNCHER', []))
-        print "************%s" % launcher
+        print "LAUNCHER---%s" % launcher
         if launcher:
             # filter out the launchers that are not in self.hydra_info
             launcher = [x for x in launcher if x in self.hydra_info.get('launcher', [])]
@@ -841,6 +841,7 @@ class MPI(object):
             else:
                 self.log.debug("make_mpiexec_hydra_options: no launcher from HYDRA_LAUNCHER %s and hydra_info %s",
                                 self.HYDRA_LAUNCHER, self.hydra_info)
+
         if launcher:
             self.mpiexec_options.append("-%s %s" % (self.HYDRA_LAUNCHER_NAME, launcher[0]))
 
