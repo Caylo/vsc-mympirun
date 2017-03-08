@@ -831,9 +831,15 @@ class MPI(object):
                 self.log.debug("make_mpiexec_hydra_options: no rmk from HYDRA_RMK %s and hydra_info %s",
                                self.HYDRA_RMK, self.hydra_info)
 
+        print "OPTION------- %s" % self.options.launcher
+
         default_launcher = getattr(self, 'HYDRA_LAUNCHER', None)
         if self.options.launcher:
-            launcher = [self.options.launcher].extend(default_launcher)
+            launcher = [self.options.launcher]
+            print "LAUNCHER LIST------ %s" % launcher
+            print "DEFAULT------ %s" % default_launcher
+            launcher.extend(default_launcher)
+            print "LAUNCHER EXTEND----- %s" % launcher
         else:
             launcher = default_launcher
 
