@@ -855,10 +855,11 @@ class MPI(object):
         if launcher:
             self.mpiexec_options.append("-%s %s" % (self.HYDRA_LAUNCHER_NAME, launcher[0]))
 
-        launcher_exec = getattr(self, 'HYDRA_LAUNCHER_EXEC', None)
-        if launcher_exec is not None:
-            self.log.debug("make_mpiexec_hydra_options: HYDRA using launcher exec %s", launcher_exec)
-            self.mpiexec_options.append("-%s-exec %s" % (self.HYDRA_LAUNCHER_NAME, launcher_exec))
+        else:
+            launcher_exec = getattr(self, 'HYDRA_LAUNCHER_EXEC', None)
+            if launcher_exec is not None:
+                self.log.debug("make_mpiexec_hydra_options: HYDRA using launcher exec %s", launcher_exec)
+                self.mpiexec_options.append("-%s-exec %s" % (self.HYDRA_LAUNCHER_NAME, launcher_exec))
 
     def get_hydra_info(self):
         """Get a dict with hydra info."""
