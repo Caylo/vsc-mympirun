@@ -38,7 +38,7 @@ class PBS(Sched):
 
     RSH_LARGE_CMD = 'pbsssh'
     RSH_LARGE_LIMIT = 'pbsssh'
-    HYDRA_LAUNCHER_EXEC = 'pbsssh'
+    HYDRA_LAUNCHER_EXEC = 'pbsdsh'
     HYDRA_RMK = ['pbs']
 
     def set_nodes(self):

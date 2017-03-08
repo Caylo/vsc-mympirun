@@ -822,7 +822,6 @@ class MPI(object):
         if self.options.branchcount is not None:
             self.mpiexec_options.append("--branch-count %d" % self.options.branchcount)
 
-        # default launcher seems ssh
         if getattr(self, 'HYDRA_RMK', None) is not None:
             rmk = [x for x in self.HYDRA_RMK if x in self.hydra_info.get('rmk', [])]
             if len(rmk) > 0:
@@ -831,21 +830,21 @@ class MPI(object):
             else:
                 self.log.debug("make_mpiexec_hydra_options: no rmk from HYDRA_RMK %s and hydra_info %s",
                                self.HYDRA_RMK, self.hydra_info)
-        launcher = None
-        if getattr(self, 'HYDRA_LAUNCHER', None) is not None:
-            launcher = [x for x in self.HYDRA_LAUNCHER if x in self.hydra_info.get('launcher', [])]
+
+        launcher = [self.options.launcher].extend(getattr(self, 'HYDRA_LAUNCHER', []))
+        print "************%s" % launcher
+        if launcher:
+            # filter out the launchers that are not in self.hydra_info
+            launcher = [x for x in launcher if x in self.hydra_info.get('launcher', [])]
             if launcher:
                 self.log.debug("make_mpiexec_hydra_options: HYDRA: launcher %s, using first one", launcher)
             else:
                 self.log.debug("make_mpiexec_hydra_options: no launcher from HYDRA_LAUNCHER %s and hydra_info %s",
                                 self.HYDRA_LAUNCHER, self.hydra_info)
-
-        launcher_exec = self.HYDRA_LAUNCHER_EXEC
-        if not launcher:
-            launcher_exec = self.get_rsh()
-        else:
+        if launcher:
             self.mpiexec_options.append("-%s %s" % (self.HYDRA_LAUNCHER_NAME, launcher[0]))
 
+        launcher_exec = getattr(self, 'HYDRA_LAUNCHER_EXEC', None)
         if launcher_exec is not None:
             self.log.debug("make_mpiexec_hydra_options: HYDRA using launcher exec %s", launcher_exec)
             self.mpiexec_options.append("-%s-exec %s" % (self.HYDRA_LAUNCHER_NAME, launcher_exec))
