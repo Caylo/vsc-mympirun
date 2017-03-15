@@ -220,6 +220,7 @@ class IntelHydraMPI(IntelMPI):
     }
 
     def make_mpiexec_hydra_options(self):
+
         super(IntelHydraMPI, self).make_mpiexec_hydra_options()
         self.mpiexec_options.append("-perhost %d" % self.multiplier)
 
