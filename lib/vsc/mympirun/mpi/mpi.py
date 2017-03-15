@@ -834,9 +834,9 @@ class MPI(object):
         default_launcher = getattr(self, 'HYDRA_LAUNCHER', None)
         if self.options.launcher:
             launcher = [self.options.launcher]
-            launcher.extend(default_launcher)
         else:
             launcher = default_launcher
+            self.log.debug("Available launchers (default): %s" % launcher)
 
         if launcher:
             # filter out the launchers that are not in self.hydra_info
