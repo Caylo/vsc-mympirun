@@ -833,11 +833,12 @@ class MPI(object):
 
         default_launcher = getattr(self, 'HYDRA_LAUNCHER', None)
         avail_launchers = self.hydra_info.get('launcher', [])
-        self.log.debug("---- def launcher %s avail launcher %s", (default_launcher, avail_launchers))
+
         if self.options.launcher:
             launcher = self.options.launcher
-            #if not launcher in avail_launchers:
-            #    self.log.raiseException("Specified launcher %s does not exist, available launchers: %s" % (launcher, avail_launchers))
+            if not launcher in avail_launchers:
+                err = "Specified launcher %s does not exist, available launchers: %s"
+                self.log.raiseException(err % (launcher, avail_launchers))
 
         else:
             if default_launcher in avail_launchers:
@@ -850,6 +851,7 @@ class MPI(object):
         if launcher:
             self.mpiexec_options.append("-%s %s" % (self.HYDRA_LAUNCHER_NAME, launcher))
 
+        # when using ssh launcher, use custom pbsssh wrapper as exec
         if launcher=='ssh':
             launcher_exec = getattr(self, 'HYDRA_LAUNCHER_EXEC', None)
 
