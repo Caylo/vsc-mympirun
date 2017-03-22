@@ -93,8 +93,7 @@ class Sched(object):
     RSH_LARGE_LIMIT = 16
 
     HYDRA_RMK = []
-    HYDRA_LAUNCHER = 'pbsdsh'
-    HYDRA_LAUNCHER_EXEC = None
+    HYDRA_LAUNCHER = 'ssh'
 
     def __init__(self, options=None, **kwargs):
         if not hasattr(self, 'log'):
